@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "sumtziPZWWkMDV0oL09RpZ/TsePrTMN72Nfax/oqjoQ=",
+  "Source": "PessoaMicroservice",
+  "BasePath": "_content/PessoaMicroservice",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
