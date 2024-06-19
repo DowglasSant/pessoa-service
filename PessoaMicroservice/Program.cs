@@ -1,16 +1,25 @@
 using Microsoft.EntityFrameworkCore;
 using PessoaMicroservice.Component;
 using PessoaMicroservice.Context;
+using PessoaMicroservice.Redis;
 using PessoaMicroservice.Repository;
 using PessoaMicroservice.Service;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHostedService<PessoaConsumer>();
+
+builder.Services.AddSingleton<IConnectionMultiplexer>(provider =>
+{
+    var configuration = provider.GetRequiredService<IConfiguration>();
+    var redisConnectionString = configuration.GetSection("Redis:ConnectionString").Value;
+    return ConnectionMultiplexer.Connect(redisConnectionString);
+});
+
+builder.Services.AddSingleton<RedisCache>();
 
 builder.Services.AddDbContext<PessoaDbContext>(options =>
 {
@@ -28,7 +37,6 @@ builder.Services.AddLogging(logging =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

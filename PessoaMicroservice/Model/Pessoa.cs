@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace PessoaMicroservice.Model
 {
     [Table("pessoa")]
-    public class Pessoa
+    public class Pessoa : IEquatable<Pessoa>
     {
         [Key]
         [StringLength(11)]
@@ -22,5 +22,29 @@ namespace PessoaMicroservice.Model
         public DateTime DataDeCriacao {get; set;}
 
         public DateTime? DataDeAtualizacao {get; set;}
+
+        public bool Equals(Pessoa other)
+        {
+            if (other == null)
+                return false;
+
+            return CPF == other.CPF &&
+                   Nome == other.Nome &&
+                   Idade == other.Idade &&
+                   Email == other.Email;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || !(obj is Pessoa))
+                return false;
+
+            return Equals(obj as Pessoa);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(CPF, Nome, Idade, Email);
+        }
     }
 }

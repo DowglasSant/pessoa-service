@@ -2,12 +2,6 @@ using Confluent.Kafka;
 using Newtonsoft.Json;
 using PessoaMicroservice.Model;
 using PessoaMicroservice.Service;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace PessoaMicroservice.Component
 {
@@ -54,7 +48,7 @@ namespace PessoaMicroservice.Component
                             {
                                 var pessoaService = scope.ServiceProvider.GetRequiredService<PessoaService>();
                                 Pessoa pessoaRecebida = JsonConvert.DeserializeObject<Pessoa>(result.Message.Value);
-                                await pessoaService.AdicionarPessoa(pessoaRecebida);
+                                await pessoaService.ProcessarPessoa(pessoaRecebida);
                             }
                         }
                     }

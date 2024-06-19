@@ -4,6 +4,6 @@ namespace PessoaMicroservice.Repository
 {
     public interface IPessoaRepository
     {
-        Task AdicionarPessoa(Pessoa pessoa);
+        Task AdicionarOuAtualizarPessoa(Pessoa pessoa);
     }
 }

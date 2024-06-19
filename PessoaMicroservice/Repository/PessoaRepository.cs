@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using PessoaMicroservice.Context;
 using PessoaMicroservice.Model;
 
@@ -12,9 +13,25 @@ namespace PessoaMicroservice.Repository
             _pessoaDbContext = pessoaDbContext;
         }
 
-        public async Task AdicionarPessoa(Pessoa pessoa)
+        public async Task AdicionarOuAtualizarPessoa(Pessoa pessoa)
         {
-            _pessoaDbContext.PessoaContext.Add(pessoa);
+            var existingPessoa = await _pessoaDbContext.PessoaContext
+                .FirstOrDefaultAsync(p => p.CPF == pessoa.CPF);
+
+            if (existingPessoa != null)
+            {
+                existingPessoa.Nome = pessoa.Nome;
+                existingPessoa.Idade = pessoa.Idade;
+                existingPessoa.Email = pessoa.Email;
+                existingPessoa.DataDeAtualizacao = DateTime.UtcNow;
+            }
+            else
+            {
+                pessoa.DataDeCriacao = DateTime.UtcNow;
+                pessoa.DataDeAtualizacao = DateTime.UtcNow;
+                _pessoaDbContext.PessoaContext.Add(pessoa);
+            }
+
             await _pessoaDbContext.SaveChangesAsync();
         }
     }
